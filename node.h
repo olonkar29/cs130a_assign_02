@@ -18,9 +18,25 @@ class node{
 		node(std::string cont, int f){content = cont; freq = f;}
 		void setContent(std::string c) {content = c;}
 		void setFreq(int f) {freq = f;}
+		void incFreq() {freq++;}
 
 		std::string getContent() {return content;}
 		int getFreq() {return freq;}
+};
+
+class hashNode{
+	private:
+		//points to the minHeap nodes
+		node* loc;
+
+		//0 is unused, 1  is active, 2 is deleted
+		int state;
+	public:
+		hashNode(){loc = NULL; state = 0;}
+		void setLoc(node* n) {loc = n;}
+		void setState(int s) {state = s;}
+		node* getLoc() {return loc;}
+		int getState() {return state;}
 };
 
 #endif

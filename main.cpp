@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <vector>
 #include "node.h"
+#include "topK.h"
 
 using namespace std;
 
@@ -33,5 +34,11 @@ int main(int argc, char *argv[]) {
 	node* n = new node("halo", 12);
 	cout << n->getFreq() << endl;
 
+	hashNode* h = new hashNode();
+	h->setLoc(n);
+	h->setState(23);
+	cout << h->getState() << endl;
+
+	topK* priority = new topK(k);
 	return 0;
 }
