@@ -4,7 +4,6 @@
 #include <cstdlib>
 #include <vector>
 #include "node.h"
-#include "minHeap.h"
 
 using namespace std;
 
@@ -34,6 +33,5 @@ int main(int argc, char *argv[]) {
 	node* n = new node("halo", 12);
 	cout << n->getFreq() << endl;
 
-	minHeap h(k);
 	return 0;
 }
