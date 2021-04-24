@@ -5,7 +5,7 @@
 #include <vector>
 #include "node.h"
 #include "topK.h"
-
+#include <unordered_map>
 using namespace std;
 
 int main(int argc, char *argv[]) {
@@ -24,21 +24,36 @@ int main(int argc, char *argv[]) {
 			lines.push_back(line);
 		}
 	}
-	
+	/*	
 	cout << "No. of Top-K elements: " << k << endl;
 	cout << "First K strings: " << endl;
 	for (int i = 0; i < k; i++) {
 		cout << lines.at(i) << endl;
 	}
-	
-	node* n = new node("halo", 12);
-	cout << n->getFreq() << endl;
+	*/	
 
-	hashNode* h = new hashNode();
-	h->setLoc(n);
-	h->setState(23);
-	cout << h->getState() << endl;
 
 	topK* priority = new topK(k);
+	priority->insert("cool");
+	if(priority->searchtable("cool"))
+		cout << "found" << endl;
+
+	if(priority->searchtable("jeez"))
+		cout << "found" << endl;
+	else
+		cout << "not found" << endl;
+	
+	priority->printHeap();
+	priority->printTable();
+	cout << "-------------------------------" << endl;
+	priority->insert("cool");
+	priority->printHeap();
+	priority->printTable();
+	cout << "-------------------------------" << endl;
+	priority->insert("jeez");
+	priority->printHeap();
+	priority->printTable();
+	cout << "-------------------------------" << endl;
+
 	return 0;
 }
