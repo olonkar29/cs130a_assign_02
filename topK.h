@@ -4,6 +4,8 @@
 #include "node.h"
 #include <string>
 #include <unordered_set>
+#include <vector>
+
 using namespace std;
 
 class topK {
@@ -12,9 +14,11 @@ class topK {
 		node* root;
 		int capacity;
 		int currentSize;
+		std::vector<std::string> order; //stores the highest frequency in the minHeap
 
 		//Fields relating to the hashTable
 		hashNode* table;
+
 	public:
 		topK(int c){
 			capacity = c;
@@ -37,7 +41,7 @@ class topK {
 				currentSize++;
 				root[currentSize].setContent(in);
 				root[currentSize].setFreq(1);
-				
+				order.push_back(in);
 				std::size_t index = (std::hash<std::string>{}(in))%(4*capacity);
 				int quad = 0;
 				
@@ -122,6 +126,24 @@ class topK {
 					//adjust address in the hashTable
 					table[childHash].setLoc(&root[parentInd]);
 					table[parentHash].setLoc(&root[childInd]);
+
+				} else if(root[childInd].getFreq() == root[parentInd].getFreq()) {
+					//check if child is older than the parent
+					if (this->getOrder(root[childInd].getContent()) < this->getOrder(root[parentInd].getContent())) {
+						//swap
+						node temp(root[childInd].getContent(), root[childInd].getFreq());
+						root[childInd].setContent(root[parentInd].getContent());
+						root[childInd].setFreq(root[parentInd].getFreq());
+						root[parentInd].setContent(temp.getContent());
+						root[parentInd].setFreq(temp.getFreq());
+
+						//adjust address in the hashTable
+						table[childHash].setLoc(&root[parentInd]);
+						table[parentHash].setLoc(&root[childInd]);
+
+					} else {
+						break;
+					}
 				} else {
 					break;
 				}
@@ -146,6 +168,17 @@ class topK {
 					cout << table[i].getLoc()->getContent() << ": " << table[i].getLoc() << endl;
 				}
 			}
+		}
+
+		int getOrder(std::string in) {
+			//int index = 0;
+			for(int i = 0; i < order.size(); i++) {
+				if(order.at(i).compare(in)==0) {
+					return i;
+				}
+			}
+			//if the string is not in the order vector... should never happen if correctly instantiated...
+			return -1;
 		}
 };
 

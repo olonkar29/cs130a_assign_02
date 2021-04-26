@@ -46,14 +46,30 @@ int main(int argc, char *argv[]) {
 	priority->printHeap();
 	priority->printTable();
 	cout << "-------------------------------" << endl;
+	
 	priority->insert("cool");
 	priority->printHeap();
 	priority->printTable();
 	cout << "-------------------------------" << endl;
+	
 	priority->insert("jeez");
 	priority->printHeap();
 	priority->printTable();
 	cout << "-------------------------------" << endl;
 
+	priority->insert("jeez");
+	priority->printHeap();
+	priority->printTable();
+	cout << "-------------------------------" << endl;
+	
+	priority->insert("greetings!./");
+	priority->printHeap();
+	priority->printTable();
+	cout << "-------------------------------" << endl;
+	
+	priority->insert("jeez");
+	priority->printHeap();
+	priority->printTable();
+	cout << "-------------------------------" << endl;
 	return 0;
 }
