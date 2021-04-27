@@ -34,15 +34,8 @@ int main(int argc, char *argv[]) {
 
 
 	topK* priority = new topK(k);
-	priority->insert("cool");
-	if(priority->searchtable("cool"))
-		cout << "found" << endl;
-
-	if(priority->searchtable("jeez"))
-		cout << "found" << endl;
-	else
-		cout << "not found" << endl;
 	
+	priority->insert("cool");
 	priority->printHeap();
 	priority->printTable();
 	cout << "-------------------------------" << endl;
@@ -67,11 +60,16 @@ int main(int argc, char *argv[]) {
 	priority->printTable();
 	cout << "-------------------------------" << endl;
 	
+	priority->insert("greetings!./");
+	priority->printHeap();
+	priority->printTable();
+	cout << "-------------------------------" << endl;
+	
 	priority->insert("jeez");
 	priority->printHeap();
 	priority->printTable();
 	cout << "-------------------------------" << endl;
-
+	
 	int minFreq = priority->deleteMin();
 	priority->printHeap();
 	priority->printTable();

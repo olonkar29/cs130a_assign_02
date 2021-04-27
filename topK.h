@@ -82,26 +82,29 @@ class topK {
 		}
 
 		int deleteMin() {
-			//deletes first value in heap, returns the value of frequency of the minimum..
-			int prevFreq = root[1].getFreq();
-			//int order = this->getOrder(root[1].getContent());
-			//order.erase(order.begin() + order - 1);
-			//adjust locations in hashTable: nullify initial root, set last val's location to root
-			table[getTableInd(root[1].getContent())].setState(2);
-			table[getTableInd(root[1].getContent())].setLoc(NULL);
-			table[getTableInd(root[currentSize].getContent())].setLoc(&root[1]);
+			if(currentSize > 0) {
+				//deletes first value in heap, returns the value of frequency of the minimum..
+				int prevFreq = root[1].getFreq();
+				//int order = this->getOrder(root[1].getContent());
+				//order.erase(order.begin() + order - 1);
+				//adjust locations in hashTable: nullify initial root, set last val's location to root
+				table[getTableInd(root[1].getContent())].setState(2);
+				table[getTableInd(root[1].getContent())].setLoc(NULL);
+				table[getTableInd(root[currentSize].getContent())].setLoc(&root[1]);
 
-			//set root to the last value in the heap
-			root[1].setContent(root[currentSize].getContent());
-			root[1].setFreq(root[currentSize].getFreq());
-			//reset last value in heap to default
-			root[currentSize].setContent("");
-			root[currentSize].setFreq(0);
-			//reduce currentSize by one
-			currentSize--;
-			//percDown and adjust... 
-			this->percDown();
-			return prevFreq;
+				//set root to the last value in the heap
+				root[1].setContent(root[currentSize].getContent());
+				root[1].setFreq(root[currentSize].getFreq());
+				//reset last value in heap to default
+				root[currentSize].setContent("");
+				root[currentSize].setFreq(0);
+				//reduce currentSize by one
+				currentSize--;
+				//percDown and adjust... 
+				this->percDown();
+				return prevFreq;
+			}
+			return -1;
 		}
 
 		//returns the address in minHeap relating to the string
@@ -212,10 +215,27 @@ class topK {
 				parentHash = this->getTableInd(root[parent].getContent());
 				if(root[parent].getFreq() > root[minChild].getFreq()) {
 					//swap
+					node temp(root[minChild].getContent(), root[minChild].getFreq());
+					root[minChild].setContent(root[parent].getContent());
+					root[minChild].setFreq(root[parent].getFreq());
+					root[parent].setContent(temp.getContent());
+					root[parent].setFreq(temp.getFreq());
+
+					//adjust address in the hashTable
+					table[childHash].setLoc(&root[parent]);
+					table[parentHash].setLoc(&root[minChild]);
 
 				} else if(root[parent].getFreq() == root[minChild].getFreq() && this->getOrder(root[parent].getContent()) > this->getOrder(root[minChild].getContent())) {
 					//swap
+					node temp(root[minChild].getContent(), root[minChild].getFreq());
+					root[minChild].setContent(root[parent].getContent());
+					root[minChild].setFreq(root[parent].getFreq());
+					root[parent].setContent(temp.getContent());
+					root[parent].setFreq(temp.getFreq());
 
+					//adjust address in the hashTable
+					table[childHash].setLoc(&root[parent]);
+					table[parentHash].setLoc(&root[minChild]);
 				} else {
 					break;
 				}
