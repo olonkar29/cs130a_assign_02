@@ -71,5 +71,12 @@ int main(int argc, char *argv[]) {
 	priority->printHeap();
 	priority->printTable();
 	cout << "-------------------------------" << endl;
+
+	int minFreq = priority->deleteMin();
+	priority->printHeap();
+	priority->printTable();
+	cout << "Min freq: " << minFreq << endl;
+	cout << "-------------------------------" << endl;
+
 	return 0;
 }

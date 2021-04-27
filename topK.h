@@ -55,8 +55,53 @@ class topK {
 				//percolateUp and adjust 
 				this->percUp();
 			} else {
-				//deleteMin
+				//currentSize == capacity
+				//
+				//deleteMin, save frequency for min
+				int insertFreq = this->deleteMin();
+				//insert new item with frequency saved from prev min
+				currentSize++;
+				root[currentSize].setContent(in);
+				root[currentSize].setFreq(insertFreq);
+				order.push_back(in);
+				std::size_t index = (std::hash<std::string>{}(in))%(4*capacity);
+				int quad = 0;
+				
+				while(table[index].getState() == 1){
+					quad++;
+					index = (index + (quad*quad))%(4*capacity);
+				}
+				
+				table[index].setLoc(&root[currentSize]);
+				table[index].setState(1);
+				//percolateUp and adjust 
+				this->percUp();
+				
+				//percDown and adjust, make sure newer string stays at the bottom.
 			}
+		}
+
+		int deleteMin() {
+			//deletes first value in heap, returns the value of frequency of the minimum..
+			int prevFreq = root[1].getFreq();
+			//int order = this->getOrder(root[1].getContent());
+			//order.erase(order.begin() + order - 1);
+			//adjust locations in hashTable: nullify initial root, set last val's location to root
+			table[getTableInd(root[1].getContent())].setState(2);
+			table[getTableInd(root[1].getContent())].setLoc(NULL);
+			table[getTableInd(root[currentSize].getContent())].setLoc(&root[1]);
+
+			//set root to the last value in the heap
+			root[1].setContent(root[currentSize].getContent());
+			root[1].setFreq(root[currentSize].getFreq());
+			//reset last value in heap to default
+			root[currentSize].setContent("");
+			root[currentSize].setFreq(0);
+			//reduce currentSize by one
+			currentSize--;
+			//percDown and adjust... 
+			this->percDown();
+			return prevFreq;
 		}
 
 		//returns the address in minHeap relating to the string
@@ -96,6 +141,10 @@ class topK {
 						quad++;
 						index = (index + (quad*quad))%(4*capacity);	
 					}
+				} else {
+					quad++;
+					index = (index + (quad*quad))%(4*capacity);	
+
 				}
 			}
 
@@ -152,7 +201,47 @@ class topK {
 		}
 
 		void percDown() {
+			//cout << "percDowned" << endl;
+			int parent = 1;
+			int minChild;
+			int parentHash;
+			int childHash;
+			while(parent < currentSize && this->getMinChild(parent) > 0) {
+				minChild = this->getMinChild(parent);
+				childHash = this->getTableInd(root[minChild].getContent());
+				parentHash = this->getTableInd(root[parent].getContent());
+				if(root[parent].getFreq() > root[minChild].getFreq()) {
+					//swap
 
+				} else if(root[parent].getFreq() == root[minChild].getFreq() && this->getOrder(root[parent].getContent()) > this->getOrder(root[minChild].getContent())) {
+					//swap
+
+				} else {
+					break;
+				}
+				
+			}
+		}
+
+		//returns the index of the minimum of the two children given a parent.
+		int getMinChild(int index) {
+			if(root[2*index].getFreq() > 0) {
+				if((root[2*index].getFreq() < root[2*index + 1].getFreq()) || root[2*index + 1].getFreq() == 0) {
+					return 2*index;
+				} else if ((root[2*index].getFreq() > root[2*index + 1].getFreq())&& root[2*index + 1].getFreq() > 0) {
+					return (2*index + 1);
+				} else if (root[2*index].getFreq() == root[2*index + 1].getFreq()) {
+					if(this->getOrder(root[2*index].getContent()) < this->getOrder(root[2*index + 1].getContent())) {
+						return 2*index;
+					} else {
+						return (2*index + 1);
+					}
+				} 
+				return -1;
+			} else {
+				//at the leaf level
+				return -1;
+			}
 		}
 
 		void printHeap() {
@@ -160,6 +249,7 @@ class topK {
 			for(int i = 1; i <= currentSize; i++) {
 				cout << i << ": " << root[i].getContent() << ", " << root[i].getFreq() << endl;
 			}
+			cout << "Current size is " << currentSize << endl;
 		}
 
 		void printTable() {
@@ -179,6 +269,12 @@ class topK {
 			}
 			//if the string is not in the order vector... should never happen if correctly instantiated...
 			return -1;
+		}
+
+		void printOrder() {
+			for(int i = 0; i < order.size(); i++) {
+				cout << i << ": " << order.at(i) << endl;
+			}
 		}
 };
 
